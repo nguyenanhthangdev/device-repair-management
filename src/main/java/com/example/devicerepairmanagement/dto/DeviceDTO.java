@@ -2,13 +2,26 @@ package com.example.devicerepairmanagement.dto;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.*;
+import lombok.Data;
+
+@Data
 public class DeviceDTO {
     private Long id;
+
+    @NotBlank(message = "Tên thiết bị không được để trống")
     private String name;
+
     private Long typeId; 
+
     private String typeName;
+
     private String description;
+
+    @NotNull(message = "Ngày tiếp nhận là bắt buộc")
     private LocalDate receivedDate;
+
+    @NotNull(message = "Trạng thái là bắt buộc")
     private String status;
 
     public DeviceDTO(Long id, String name, Long typeId, String typeName, String description, LocalDate receivedDate, String status) {
