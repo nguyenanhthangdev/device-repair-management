@@ -8,4 +8,6 @@ import com.example.devicerepairmanagement.entity.RepairOrder;
 @Repository
 public interface RepairOrderRepository extends JpaRepository<RepairOrder ,Long> {
     
+    boolean existsByCode(String code);
+
 }

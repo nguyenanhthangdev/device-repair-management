@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,11 +27,8 @@ public class RepairOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String code; // Mã đơn: ví dụ RO20250714
-
-    @ManyToOne
-    @JoinColumn(name = "device_id")
-    private Device device;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
