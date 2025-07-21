@@ -1,0 +1,34 @@
+.app-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-x: auto;
+  background-color: #f9f9f9;
+  position: relative;
+}
+
+/* Hamburger button */
+.menu-button {
+  display: none;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+/* Hiện menu button khi màn hình nhỏ */
+@media (max-width: 768px) {
+  .menu-button {
+    display: block;
+  }
+}
