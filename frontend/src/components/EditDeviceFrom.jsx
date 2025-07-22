@@ -1,19 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   Button,
+  Container,
   MenuItem,
   Typography,
   Box,
   FormControl,
   InputLabel,
   Select,
+  Alert,
 } from "@mui/material";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { getDeviceById, updateDevice } from "../api/DeviceApi";
 import { getAllDeviceTypes } from "../api/DeviceTypeApi";
-import { createDevice } from "../api/DeviceApi";
-import { useNavigate } from "react-router-dom";
 
-function AddDeviceForm() {
+const EditDeviceForm = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [device, setDevice] = useState({
     name: "",
     typeId: "",
@@ -22,25 +28,32 @@ function AddDeviceForm() {
     status: "",
   });
 
-  const [deviceTypes, setDeviceTypes] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [types, setTypes] = useState([]);
   const [errors, setErrors] = useState({});
-  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    getAllDeviceTypes()
-      .then((res) => setDeviceTypes(res.data))
-      .catch((err) => console.error("Lỗi tải loại thiết bị:", err));
-  }, []);
+    getDeviceById(id).then((res) => {
+      const deviceData = res.data;
+      setDevice({
+        ...deviceData,
+        typeId: deviceData.type?.id || "",
+      });
+    });
+    getAllDeviceTypes().then((res) => setTypes(res.data));
+  }, [id]);
 
   const validate = () => {
     const newErrors = {};
 
-    if (!device.name.trim()) newErrors.name = "Tên thiết bị không được để trống.";
+    if (!device.name.trim())
+      newErrors.name = "Tên thiết bị không được để trống.";
     if (!device.typeId) newErrors.typeId = "Vui lòng chọn loại thiết bị.";
-    if (!device.description.trim()) newErrors.description = "Mô tả lỗi không được để trống.";
-    if (!device.receivedDate) newErrors.receivedDate = "Ngày nhận không được để trống.";
-    if (!device.status) newErrors.status = "Vui lòng chọn trạng thái.";
+    if (!device.receivedDate)
+      newErrors.receivedDate = "Ngày nhận không được để trống.";
+    if (!device.status.trim()) newErrors.status = "Vui lòng chọn trạng thái.";
+    if (!device.description.trim())
+      newErrors.description = "Mô tả lỗi không được để trống.";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -48,26 +61,30 @@ function AddDeviceForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setDevice((prev) => ({ ...prev, [name]: value }));
+    setDevice({ ...device, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!validate()) return;
     if (isSubmitting) return;
-
     setIsSubmitting(true);
 
     try {
-      await createDevice(device);
+      await updateDevice(id, device);
       navigate("/devices", {
-        state: { success: true, message: "Thêm thiết bị thành công!" },
+        state: {
+          success: true,
+          message: "Cập nhật thiết bị thành công!",
+        },
       });
     } catch (err) {
-      console.error("Lỗi thêm thiết bị:", err);
+      console.error("Lỗi cập nhật:", err);
       navigate("/devices", {
-        state: { success: false, message: "Thêm thiết bị thất bại!" },
+        state: {
+          success: false,
+          message: "Cập nhật thiết bị thất bại!",
+        },
       });
     } finally {
       setIsSubmitting(false);
@@ -75,34 +92,33 @@ function AddDeviceForm() {
   };
 
   return (
-    <Box sx={{ maxWidth: "100%", mx: "auto", p: 3 }}>
+    <Container maxWidth="100%">
       <Typography variant="h5" gutterBottom>
-        Thêm Thiết Bị
+        Chỉnh sửa thiết bị
       </Typography>
 
-      <form onSubmit={handleSubmit}>
+      <Box component="form" onSubmit={handleSubmit} noValidate>
         <TextField
+          fullWidth
+          margin="normal"
           label="Tên thiết bị"
           name="name"
           value={device.name}
           onChange={handleChange}
-          fullWidth
-          margin="normal"
-          error={Boolean(errors.name)}
+          error={!!errors.name}
           helperText={errors.name}
         />
 
-        <FormControl fullWidth margin="normal">
-          <InputLabel id="device-type-label">Loại thiết bị</InputLabel>
+        <FormControl fullWidth margin="normal" error={!!errors.typeId}>
+          <InputLabel id="type-label">Loại thiết bị</InputLabel>
           <Select
-            labelId="device-type-label"
+            labelId="type-label"
             name="typeId"
             value={device.typeId}
             onChange={handleChange}
             label="Loại thiết bị"
-            error={Boolean(errors.typeId)}
           >
-            {deviceTypes.map((type) => (
+            {types.map((type) => (
               <MenuItem key={type.id} value={type.id}>
                 {type.name}
               </MenuItem>
@@ -116,64 +132,57 @@ function AddDeviceForm() {
         </FormControl>
 
         <TextField
-          label="Mô tả lỗi"
+          fullWidth
+          margin="normal"
+          label="Mô tả"
           name="description"
           value={device.description}
           onChange={handleChange}
-          fullWidth
-          margin="normal"
-          error={Boolean(errors.description)}
+          error={!!errors.description}
           helperText={errors.description}
         />
 
         <TextField
-          label="Ngày nhận"
-          name="receivedDate"
-          type="date"
-          value={device.receivedDate}
-          onChange={handleChange}
           fullWidth
           margin="normal"
+          label="Ngày nhận"
+          type="date"
+          name="receivedDate"
+          value={device.receivedDate}
+          onChange={handleChange}
           InputLabelProps={{ shrink: true }}
-          error={Boolean(errors.receivedDate)}
+          error={!!errors.receivedDate}
           helperText={errors.receivedDate}
         />
 
-        <FormControl fullWidth margin="normal">
-          <InputLabel id="device-status-label">Trạng thái</InputLabel>
+        <FormControl fullWidth margin="normal" error={!!errors.status}>
+          <InputLabel>Trạng thái</InputLabel>
           <Select
-            labelId="device-status-label"
             name="status"
             value={device.status}
-            onChange={handleChange}
             label="Trạng thái"
-            error={Boolean(errors.status)}
+            onChange={handleChange}
           >
             <MenuItem value="Chưa sửa">Chưa sửa</MenuItem>
             <MenuItem value="Đang sửa">Đang sửa</MenuItem>
             <MenuItem value="Đã sửa xong">Đã sửa xong</MenuItem>
             <MenuItem value="Đã trả">Đã trả</MenuItem>
           </Select>
-          {errors.status && (
-            <Typography variant="caption" color="error">
-              {errors.status}
-            </Typography>
-          )}
         </FormControl>
 
-        <Button
-          variant="contained"
-          type="submit"
-          color="primary"
-          fullWidth
-          disabled={isSubmitting}
-          sx={{ mt: 2 }}
-        >
-          {isSubmitting ? "Đang xử lý..." : "Thêm"}
-        </Button>
-      </form>
-    </Box>
+        <Box mt={2}>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            disabled={isSubmitting}
+          >
+            Cập nhật thiết bị
+          </Button>
+        </Box>
+      </Box>
+    </Container>
   );
-}
+};
 
-export default AddDeviceForm;
+export default EditDeviceForm;

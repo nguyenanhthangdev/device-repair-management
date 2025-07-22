@@ -16,12 +16,13 @@ public class DeviceDTO {
 
     private String typeName;
 
+    @NotBlank(message = "Mô tả lỗi thiết bị không được để trống")
     private String description;
 
     @NotNull(message = "Ngày tiếp nhận là bắt buộc")
     private LocalDate receivedDate;
 
-    @NotNull(message = "Trạng thái là bắt buộc")
+    @NotBlank(message = "Trạng thái là bắt buộc")
     private String status;
 
     public DeviceDTO(Long id, String name, Long typeId, String typeName, String description, LocalDate receivedDate, String status) {

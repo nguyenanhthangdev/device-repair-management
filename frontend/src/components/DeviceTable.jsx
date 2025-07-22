@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { getAllDevices, deleteDevice, updateDevice } from "../api/DeviceApi";
+import { getAllDevices, deleteDevice } from "../api/DeviceApi";
 import {
   Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, Paper, IconButton, Button
+  TableHead, TableRow, Paper, IconButton
 } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { useNavigate } from "react-router-dom";
 
 const DeviceTable = () => {
   const [devices, setDevices] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadDevices();
@@ -19,9 +21,8 @@ const DeviceTable = () => {
     setDevices(response.data);
   };
 
-  const handleUpdate = async (id) => {
-    await updateDevice(id);
-    loadDevices(); // reload
+  const handleUpdate = (id) => {
+    navigate(`/devices/edit/${id}`); // ✅ chỉ điều hướng, không gọi API PUT
   };
 
   const handleDelete = async (id) => {
@@ -36,6 +37,7 @@ const DeviceTable = () => {
           <TableRow>
             <TableCell>Tên thiết bị</TableCell>
             <TableCell>Loại</TableCell>
+            <TableCell>Mô tả lỗi</TableCell>
             <TableCell>Trạng thái</TableCell>
             <TableCell>Hành động</TableCell>
           </TableRow>
@@ -45,6 +47,7 @@ const DeviceTable = () => {
             <TableRow key={device.id}>
               <TableCell>{device.name}</TableCell>
               <TableCell>{device.typeName}</TableCell>
+              <TableCell>{device.description}</TableCell>
               <TableCell>{device.status}</TableCell>
               <TableCell>
                 <IconButton onClick={() => handleUpdate(device.id)} color="warning">

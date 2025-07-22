@@ -4,6 +4,7 @@ import Sidebar from "./layouts/SideBar";
 import DevicePage from "./pages/DevicePage";
 import { Box, Toolbar } from "@mui/material";
 import AddDeviceForm from "./components/AddDeviceForm";
+import EditDeviceForm from "./components/EditDeviceFrom";
 
 const drawerWidth = 0;
 
@@ -23,6 +24,7 @@ function App() {
             <Route path="/customers" element={<h1>Khách hàng</h1>} />
             <Route path="/repairs" element={<h1>Đơn sửa chữa</h1>} />
             <Route path="/devices/add" element={<AddDeviceForm />} />
+            <Route path="/devices/edit/:id" element={<EditDeviceForm />} />
           </Routes>
         </Box>
       </Box>

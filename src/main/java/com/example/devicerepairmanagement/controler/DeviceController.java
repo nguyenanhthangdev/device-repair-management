@@ -40,22 +40,23 @@ public class DeviceController {
     public List<DeviceDTO> getAllDevice() {
         return deviceService.findAll().stream()
                 .map(type -> new DeviceDTO(
-                                type.getId(), 
-                                type.getName(), 
-                                type.getType() != null ? type.getType().getId() : null,
-                                type.getType() != null ? type.getType().getName() : null,
-                                type.getDescription(),
-                                type.getReceivedDate(), 
-                                type.getStatus())).collect(Collectors.toList());
+                        type.getId(),
+                        type.getName(),
+                        type.getType() != null ? type.getType().getId() : null,
+                        type.getType() != null ? type.getType().getName() : null,
+                        type.getDescription(),
+                        type.getReceivedDate(),
+                        type.getStatus()))
+                .collect(Collectors.toList());
     }
 
     @PostMapping
     public ResponseEntity<?> saveDevice(@Valid @RequestBody DeviceDTO deviceDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<String> errors = bindingResult.getFieldErrors()
-                                    .stream()
-                                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                                    .collect(Collectors.toList());
+                    .stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .collect(Collectors.toList());
             return ResponseEntity.badRequest().body(errors);
         }
 
@@ -73,25 +74,42 @@ public class DeviceController {
         Device savedDevice = deviceService.save(device);
 
         DeviceDTO deviceDTO2 = new DeviceDTO(
-            savedDevice.getId(),
-            savedDevice.getName(),
-            savedDevice.getType() != null ? savedDevice.getType().getId() : null,
-            savedDevice.getType() != null ? savedDevice.getType().getName(): null,
-            savedDevice.getDescription(),
-            savedDevice.getReceivedDate(),
-            savedDevice.getStatus()
-        );
+                savedDevice.getId(),
+                savedDevice.getName(),
+                savedDevice.getType() != null ? savedDevice.getType().getId() : null,
+                savedDevice.getType() != null ? savedDevice.getType().getName() : null,
+                savedDevice.getDescription(),
+                savedDevice.getReceivedDate(),
+                savedDevice.getStatus());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(deviceDTO2);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getDeviceById(@PathVariable Long id) {
+        return deviceService.findById(id)
+                .map(device -> {
+                    DeviceDTO dto = new DeviceDTO(
+                            device.getId(),
+                            device.getName(),
+                            device.getType() != null ? device.getType().getId() : null,
+                            device.getType() != null ? device.getType().getName() : null,
+                            device.getDescription(),
+                            device.getReceivedDate(),
+                            device.getStatus());
+                    return ResponseEntity.ok(dto);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateDevice(@PathVariable Long id, @Valid @RequestBody DeviceDTO deviceDTO, BindingResult bindingResult) {
+    public ResponseEntity<?> updateDevice(@PathVariable Long id, @Valid @RequestBody DeviceDTO deviceDTO,
+            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<String> errors = bindingResult.getFieldErrors()
-                                    .stream()
-                                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                                    .collect(Collectors.toList());
+                    .stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .collect(Collectors.toList());
             return ResponseEntity.badRequest().body(errors);
         }
 
@@ -108,14 +126,14 @@ public class DeviceController {
 
                     Device savedDevice = deviceService.save(device);
 
-                    DeviceDTO deviceDTO2 = new DeviceDTO(savedDevice.getId(), 
-                                                        savedDevice.getName(), 
-                                                        savedDevice.getType().getId(), 
-                                                        savedDevice.getType().getName(), 
-                                                        savedDevice.getDescription(), 
-                                                        savedDevice.getReceivedDate(), 
-                                                        savedDevice.getStatus());
-                    
+                    DeviceDTO deviceDTO2 = new DeviceDTO(savedDevice.getId(),
+                            savedDevice.getName(),
+                            savedDevice.getType().getId(),
+                            savedDevice.getType().getName(),
+                            savedDevice.getDescription(),
+                            savedDevice.getReceivedDate(),
+                            savedDevice.getStatus());
+
                     return ResponseEntity.ok(deviceDTO2);
                 })
                 .orElse(ResponseEntity.notFound().build());
