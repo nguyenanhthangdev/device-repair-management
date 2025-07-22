@@ -1,27 +1,29 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Sidebar from './components/Sidebar';
-import DeviceList from './components/DeviceList';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Sidebar from "./layouts/SideBar";
+import DevicePage from "./pages/DevicePage";
+import { Box, Toolbar } from "@mui/material";
+
+const drawerWidth = 0;
 
 function App() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
-
   return (
     <Router>
-      <div className="app-layout">
-        <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
-        <div className="main-content">
-          <button className="menu-button" onClick={toggleSidebar}>
-            ☰
-          </button>
+      <Box sx={{ display: "flex" }}>
+        <Sidebar />
+        <Box
+          component="main"
+          sx={{ flexGrow: 1, bgcolor: "#f4f6f8", p: 3, ml: `${drawerWidth}px` }}
+        >
+          <Toolbar />
           <Routes>
-            <Route path="/devices" element={<DeviceList />} />
+            <Route path="/" element={<h1>Trang chủ</h1>} />
+            <Route path="/devices" element={<DevicePage />} />
+            <Route path="/customers" element={<h1>Khách hàng</h1>} />
+            <Route path="/repairs" element={<h1>Đơn sửa chữa</h1>} />
           </Routes>
-        </div>
-      </div>
+        </Box>
+      </Box>
     </Router>
   );
 }

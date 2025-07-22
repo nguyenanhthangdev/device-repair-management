@@ -95,36 +95,6 @@ public class DeviceController {
             return ResponseEntity.badRequest().body(errors);
         }
 
-        // Optional<Device> optionalDevice = deviceService.findById(id);
-        // if (optionalDevice.isPresent()) {
-        //     Device device = optionalDevice.get();
-        //     device.setName(deviceDTO.getName());
-        //     device.setDescription(deviceDTO.getDescription());
-        //     device.setReceivedDate(deviceDTO.getReceivedDate());
-        //     device.setStatus(deviceDTO.getStatus());
-
-        //     if (deviceDTO.getTypeId() != null) {
-        //         Optional<DeviceType> optionaldDeviceType = deviceTypeService.findById(deviceDTO.getTypeId());
-        //         if (optionaldDeviceType.isPresent()) {
-        //             device.setType(optionaldDeviceType.get());
-        //         }
-        //     }
-
-        //     Device savedDevice = deviceService.save(device);
-
-        //     DeviceDTO deviceDTO2 = new DeviceDTO(savedDevice.getId(), 
-        //                                          savedDevice.getName(), 
-        //                                          savedDevice.getType().getId(), 
-        //                                          savedDevice.getType().getName(), 
-        //                                          savedDevice.getDescription(), 
-        //                                          savedDevice.getReceivedDate(), 
-        //                                          savedDevice.getStatus());
-
-        //     return ResponseEntity.ok(deviceDTO2);
-        // } else {
-        //     return ResponseEntity.notFound().build();
-        // }
-
         return deviceService.findById(id)
                 .map(device -> {
                     device.setName(deviceDTO.getName());

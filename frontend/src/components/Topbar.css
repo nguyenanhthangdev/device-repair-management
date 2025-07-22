@@ -1,8 +1,0 @@
-/* src/components/Topbar.css */
-.topbar {
-  height: 60px;
-  background-color: #f8f9fc;
-  padding: 1rem;
-  margin-left: 220px; /* để tránh đè sidebar */
-  border-bottom: 1px solid #ddd;
-}
