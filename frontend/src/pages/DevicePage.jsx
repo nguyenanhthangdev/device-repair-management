@@ -1,20 +1,3 @@
-// import React from "react";
-// import DeviceTable from "../components/DeviceTable";
-// import { Container, Typography } from "@mui/material";
-
-// const DevicePage = () => {
-//   return (
-//     <Container>
-//       <Typography variant="h4" gutterBottom>
-//         Quản lý Thiết bị
-//       </Typography>
-//       <DeviceTable />
-//     </Container>
-//   );
-// };
-
-// export default DevicePage;
-
 import React from "react";
 import DeviceTable from "../components/DeviceTable";
 import {
@@ -24,11 +7,10 @@ import {
   Button,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { useNavigate } from "react-router-dom";
 
 const DevicePage = () => {
-  const handleAddDevice = () => {
-    alert("Mở form thêm thiết bị"); // bạn có thể mở dialog tại đây
-  };
+  const navigate = useNavigate();
 
   return (
     <Container>
@@ -46,7 +28,8 @@ const DevicePage = () => {
           variant="contained"
           color="primary"
           startIcon={<AddIcon />}
-          onClick={handleAddDevice}
+          onClick={() => navigate("/devices/add")}
+          sx={{ float: "right", mb: 2 }}
         >
           Thêm thiết bị
         </Button>

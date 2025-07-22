@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Sidebar from "./layouts/SideBar";
 import DevicePage from "./pages/DevicePage";
 import { Box, Toolbar } from "@mui/material";
+import AddDeviceForm from "./components/AddDeviceForm";
 
 const drawerWidth = 0;
 
@@ -21,6 +22,7 @@ function App() {
             <Route path="/devices" element={<DevicePage />} />
             <Route path="/customers" element={<h1>Khách hàng</h1>} />
             <Route path="/repairs" element={<h1>Đơn sửa chữa</h1>} />
+            <Route path="/devices/add" element={<AddDeviceForm />} />
           </Routes>
         </Box>
       </Box>

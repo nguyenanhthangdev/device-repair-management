@@ -43,7 +43,7 @@ public class DeviceController {
                                 type.getId(), 
                                 type.getName(), 
                                 type.getType() != null ? type.getType().getId() : null,
-                                type.getType().getName(),
+                                type.getType() != null ? type.getType().getName() : null,
                                 type.getDescription(),
                                 type.getReceivedDate(), 
                                 type.getStatus())).collect(Collectors.toList());
