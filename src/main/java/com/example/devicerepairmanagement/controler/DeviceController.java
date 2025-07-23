@@ -144,8 +144,8 @@ public class DeviceController {
         return deviceService.findById(id)
                 .map(device -> {
                     deviceService.delete(id);
-                    return ResponseEntity.noContent().build();
+                    return ResponseEntity.ok("Xóa thiết bị thành công");
                 })
-                .orElse(ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy thiết bị"));
     }
 }
