@@ -6,6 +6,8 @@ import { Box, Toolbar } from "@mui/material";
 import AddDeviceForm from "./components/AddDeviceForm";
 import EditDeviceForm from "./components/EditDeviceFrom";
 import DeviceTypePage from "./pages/DeviceTypePage";
+import AddDeviceTypeForm from "./components/AddDeviceTypeForm";
+import EditDeviceTypeForm from "./components/EditDeviceTypeForm";
 
 const drawerWidth = 0;
 
@@ -26,7 +28,9 @@ function App() {
             <Route path="/customers" element={<h1>Khách hàng</h1>} />
             <Route path="/repairs" element={<h1>Đơn sửa chữa</h1>} />
             <Route path="/devices/add" element={<AddDeviceForm />} />
+            <Route path="/device-types/add" element={<AddDeviceTypeForm />} />
             <Route path="/devices/edit/:id" element={<EditDeviceForm />} />
+            <Route path="/device-types/edit/:id" element={<EditDeviceTypeForm />} />
           </Routes>
         </Box>
       </Box>

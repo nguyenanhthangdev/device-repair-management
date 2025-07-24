@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.devicerepairmanagement.entity.DeviceType;
 import com.example.devicerepairmanagement.service.DeviceTypeService;
+import com.example.devicerepairmanagement.dto.DeviceDTO;
 import com.example.devicerepairmanagement.dto.DeviceTypeDTO;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -38,6 +39,18 @@ public class DeviceTypeController {
         DeviceType deviceType = new DeviceType();
         deviceType.setName(deviceTypeDTO.getName());
         return deviceTypeService.save(deviceType);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getDeviceTypeById(@PathVariable Long id) {
+        return deviceTypeService.findById(id)
+                .map(deviceType -> {
+                    DeviceTypeDTO dto = new DeviceTypeDTO(
+                            deviceType.getId(),
+                            deviceType.getName());
+                    return ResponseEntity.ok(dto);
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
