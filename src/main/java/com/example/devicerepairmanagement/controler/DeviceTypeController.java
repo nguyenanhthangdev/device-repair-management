@@ -67,7 +67,12 @@ public class DeviceTypeController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteDeviceType(@PathVariable Long id) {
         return deviceTypeService.findById(id)
-                .map(type->{
+                .map(type -> {
+                    if (type.getDevices() != null && !type.getDevices().isEmpty()) {
+                        return ResponseEntity.badRequest()
+                            .body("Không thể xóa loại thiết bị vì vẫn còn thiết bị đang sử dụng.");
+                    }
+
                     deviceTypeService.delete(id);
                     return ResponseEntity.noContent().build();
                 })

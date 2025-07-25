@@ -11,8 +11,12 @@ import { deleteDeviceType, getAllDeviceTypes } from "../api/DeviceTypeApi";
 
 const DeviceTypeTable = () => {
   const [deviceTypes, setDeviceTypes] = useState([]);
-  const [deleteId, setDeleteId] = useState(null); // id thiết bị cần xóa
-  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+  const [deleteId, setDeleteId] = useState(null);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success"
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,18 +37,27 @@ const DeviceTypeTable = () => {
   };
 
   const handleConfirmDelete = (id) => {
-    setDeleteId(id); // mở dialog xác nhận
+    setDeleteId(id);
   };
 
   const handleDelete = async () => {
     try {
       await deleteDeviceType(deleteId);
-      setSnackbar({ open: true, message: "✅ Đã xóa loại thiết bị", severity: "success" });
+      setSnackbar({
+        open: true,
+        message: "✅ Đã xóa loại thiết bị",
+        severity: "success"
+      });
       loadDeviceTypes();
     } catch (error) {
-      setSnackbar({ open: true, message: "❌ Xóa thất bại", severity: "error" });
+      const errMsg = error.response?.data || "❌ Xóa thất bại";
+      setSnackbar({
+        open: true,
+        message: `❌ ${errMsg}`,
+        severity: "error"
+      });
     } finally {
-      setDeleteId(null); // đóng dialog
+      setDeleteId(null);
     }
   };
 
