@@ -8,6 +8,7 @@ import EditDeviceForm from "./components/EditDeviceFrom";
 import DeviceTypePage from "./pages/DeviceTypePage";
 import AddDeviceTypeForm from "./components/AddDeviceTypeForm";
 import EditDeviceTypeForm from "./components/EditDeviceTypeForm";
+import CustomerTable from "./components/CustomerTable";
 
 const drawerWidth = 0;
 
@@ -25,8 +26,7 @@ function App() {
             <Route path="/" element={<h1>Trang chủ</h1>} />
             <Route path="/devices" element={<DevicePage />} />
             <Route path="/device-types" element={<DeviceTypePage />} />
-            <Route path="/customers" element={<h1>Khách hàng</h1>} />
-            <Route path="/repairs" element={<h1>Đơn sửa chữa</h1>} />
+            <Route path="/customers" element={<CustomerTable />} />
             <Route path="/devices/add" element={<AddDeviceForm />} />
             <Route path="/device-types/add" element={<AddDeviceTypeForm />} />
             <Route path="/devices/edit/:id" element={<EditDeviceForm />} />
